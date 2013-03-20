@@ -27,7 +27,19 @@
 #     along with the gitolite Puppet module.  If not, see <http://www.gnu.org/licenses/>.
 
 # [Remember: No empty lines between comments and class definition]
-class gitolite {
+class gitolite (
+  $user     = $gitolite::params::user,
+  $group    = $gitolite::params::user,
+  $groups   = undef,
+  $base_dir = $gitolite::params::base_dir,
+  $repo_dir = $gitolite::params::repo_dir,
+  $git_url  = $gitolite::params::git_url,
+  $provider = 'package'
+) inherits git::params {
 
+  require git
+
+  validate_string($user,$group,$base_dir,$repo_dir,$git_url,$provider)
+  validate_re($provider,['^package','^git'])
 
 }
