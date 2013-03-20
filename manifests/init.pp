@@ -30,10 +30,11 @@
 class gitolite (
   $user     = $gitolite::params::user,
   $group    = $gitolite::params::user,
-  $groups   = undef,
+  $groups   = [],
   $base_dir = $gitolite::params::base_dir,
   $repo_dir = $gitolite::params::repo_dir,
   $git_url  = $gitolite::params::git_url,
+  $shell    = $gitolite::params::shell,
   $provider = 'package'
 ) inherits git::params {
 
@@ -41,5 +42,18 @@ class gitolite (
 
   validate_string($user,$group,$base_dir,$repo_dir,$git_url,$provider)
   validate_re($provider,['^package','^git'])
+
+  # any other parameter validation & manipulation should happen here
+
+  class {'gitolite::install':
+    user      => $user,
+    group     => $group,
+    groups    => $groups,
+    base_dir  => $base_dir,
+    repo_dir  => $repo_dir,
+    git_url   => $git_url,
+    shell     => $shell,
+    provider  => $provider,
+  }
 
 }

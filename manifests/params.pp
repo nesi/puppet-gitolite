@@ -4,6 +4,7 @@ class gitolite::params {
   $base_dir = '/home/gitolite'
   $repo_dir = "${base_dir}/repositories"
   $git_url  = 'git://github.com/sitaramc/gitolite.git'
+  $shell    = '/bin/bash'
 
   case $::operatingsystem{
     fedora,redhat,centos: {
