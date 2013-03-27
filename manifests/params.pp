@@ -11,10 +11,12 @@ class gitolite::params {
     fedora,redhat,centos: {
       $package        = 'gitolite'
       $dep_packages   = ['git','perl-Error','perl-Git']
+      $bin_dir        = '/usr/bin'
     }
     debian,ubuntu{
       $package        = 'gitolite'
       $dep_packages   = ['git']
+      $bin_dir        = '/usr/bin'
     }
     default:{
       fail('The gitolite module is not configured fro ${::operatingsystem} on ${::fqdn}')

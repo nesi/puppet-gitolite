@@ -58,13 +58,24 @@ class gitolite::install(
 
   case $provider{
     'package':{
+      $bin_dir = $gitolite::params::bin_dir
       package{$gitolite::params::package:
         ensure => installed,
       }
-      anchor{'gitolite_installed':}
+      anchor{'gitolite_downloaded':
+        require => Package[$gitolite::params::package],
+      }
     }
     'git':{
-      # Not yet implemented!
+      $download_dir = "${base_dir}/gitolite"
+      $bin_dir      = "${base_dir}/bin"
+      git::repo{'gitolite_download':
+        path    => $download_dir,
+        source  => $git_url,
+      }
+      anchor{'gitolite_downloaded':
+        require => Git::Repo['gitolite_download'],
+      }
     }
     default:{
       fail("Provider choice ${provider} not recognised for gitolite on ${fqdn}.")
