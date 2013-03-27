@@ -35,12 +35,13 @@ class gitolite (
   $repo_dir = $gitolite::params::repo_dir,
   $git_url  = $gitolite::params::git_url,
   $shell    = $gitolite::params::shell,
-  $provider = 'package'
+  $provider = 'package',
+  $ssh_key  = $gitolite::params::ssh_key
 ) inherits git::params {
 
   require git
 
-  validate_string($user,$group,$base_dir,$repo_dir,$git_url,$provider)
+  validate_string($user,$group,$base_dir,$repo_dir,$git_url,$provider,$ssh_key)
   validate_re($provider,['^package','^git'])
 
   # any other parameter validation & manipulation should happen here
@@ -54,6 +55,7 @@ class gitolite (
     git_url   => $git_url,
     shell     => $shell,
     provider  => $provider,
+    ssh_key   => $ssh_key,
   }
 
 }

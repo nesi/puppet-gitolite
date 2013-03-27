@@ -5,6 +5,7 @@ class gitolite::params {
   $repo_dir = "${base_dir}/repositories"
   $git_url  = 'git://github.com/sitaramc/gitolite.git'
   $shell    = '/bin/bash'
+  $ssh_key  = "${base_dir}/.ssh/id_rsa.pub"
 
   case $::operatingsystem{
     fedora,redhat,centos: {

@@ -6,7 +6,8 @@ class gitolite::install(
   $repo_dir,
   $git_url,
   $shell,
-  $provider
+  $provider,
+  $ssh_key
 ) {
 
   # NOTE: Wrapping these definitions with if defined statements as they may
@@ -53,6 +54,21 @@ class gitolite::install(
     path      = ['/usr/bin'],
     command   = "ssh-keygen -t rsa -N "" -C '${user}@${::fqdn}'",
     creates   = "${base_dir}/.ssh/id_rsa.pub",
+  }
+
+  case $provider{
+    'package':{
+      package{$gitolite::params::package:
+        ensure => installed,
+      }
+      anchor{'gitolite_installed':}
+    }
+    'git':{
+      # Not yet implemented!
+    }
+    default:{
+      fail("Provider choice ${provider} not recognised for gitolite on ${fqdn}.")
+    }
   }
 
 }
