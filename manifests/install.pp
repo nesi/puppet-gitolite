@@ -11,6 +11,7 @@ class gitolite::install(
 
   # NOTE: Wrapping these definitions with if defined statements as they may
   # have been previously defined and set up, by dynaguppy for example
+  # It is recommended that the user is managed outside this module!
 
   if ! defined(File[$base_dir]){
     file{$base_dir:
@@ -41,6 +42,17 @@ class gitolite::install(
 
   if ! defined(Git::User['$user']){
     git::user{$user: }
+  }
+
+
+  # It is recommended that a user's SSH key is managed outside this module
+  # this is included to ensure that this module runs out-of-the-box
+
+  exec{"${user}_keygen":
+    user      = $user,
+    path      = ['/usr/bin'],
+    command   = "ssh-keygen -t rsa -N "" -C '${user}@${::fqdn}'",
+    creates   = "${base_dir}/.ssh/id_rsa.pub",
   }
 
 }
