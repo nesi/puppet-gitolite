@@ -50,10 +50,10 @@ class gitolite::install(
   # this is included to ensure that this module runs out-of-the-box
 
   exec{"${user}_keygen":
-    user      = $user,
-    path      = ['/usr/bin'],
-    command   = "ssh-keygen -t rsa -N "" -C '${user}@${::fqdn}'",
-    creates   = "${base_dir}/.ssh/id_rsa.pub",
+    user      => $user,
+    path      => ['/usr/bin'],
+    command   => "ssh-keygen -t rsa -N "" -C '${user}@${::fqdn}'",
+    creates   => "${base_dir}/.ssh/id_rsa.pub",
   }
 
   case $provider{
@@ -73,8 +73,15 @@ class gitolite::install(
         path    => $download_dir,
         source  => $git_url,
       }
+      exec{'gitolite_git_install':
+        user    => $user,
+        cwd     => $base_dir,
+        command => "${download_dir}/install -to ${bin_dir}",
+        creates => "${bin_dir}/setup",
+        require => [Git::Repo['gitolite_download']],
+      }
       anchor{'gitolite_downloaded':
-        require => Git::Repo['gitolite_download'],
+        require => [Exec['gitolite_git_install']],
       }
     }
     default:{
