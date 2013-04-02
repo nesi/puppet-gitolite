@@ -1,4 +1,4 @@
-class gitolite::install(
+class gitolite::install (
   $user,
   $group,
   $groups,
@@ -41,7 +41,7 @@ class gitolite::install(
     }
   }
 
-  if ! defined(Git::User['$user']){
+  if ! defined(Git::User[$user]){
     git::user{$user: }
   }
 
@@ -52,7 +52,7 @@ class gitolite::install(
   exec{"${user}_keygen":
     user      => $user,
     path      => ['/usr/bin'],
-    command   => "ssh-keygen -t rsa -N "" -C '${user}@${::fqdn}'",
+    command   => "ssh-keygen -t rsa -N \"\" -C \'${user}@${::fqdn}\'",
     creates   => "${base_dir}/.ssh/id_rsa.pub",
   }
 
